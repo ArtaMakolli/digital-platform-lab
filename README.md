@@ -1,4 +1,4 @@
-# Digital Platform Lab
+# Digital Platform Lab - Updated 2026-09-18 
 
 Digital Platform Lab is the practical workspace for the IHM course **Teknik för digitala plattformar**.
 
