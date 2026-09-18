@@ -38,7 +38,7 @@ The lab requires Node.js 20 or later. It has no external runtime dependencies.
 npm start
 ```
 
-Open <http://localhost:3000> and follow the instructions in `labs/01-dataflow/README.md`.
+Open <http://localhost:3000> and follow the [Lab 1–9 index](labs/README.md). The step-by-step student instructions are in Swedish.
 
 Run the automated checks with:
 
@@ -54,4 +54,4 @@ Open a fresh browser-based copy:
 
 ## Status
 
-The pilot application implements one observable client-to-server event flow. The remaining labs currently document their intended scope and will be implemented as the lesson plans are finalised.
+The pilot application implements one observable client-to-server event flow. Labs 1–9 now provide complete guided instructions using that application; later labs ask students to make small controlled changes to its client code. It is a teaching model, not a production analytics system.
