@@ -11,9 +11,51 @@ Du kan visa eventnamn, parametrar och tidpunkt, jämföra klientens objekt med r
 ## Steg för steg
 
 1. Starta appen och öppna `public/app.js`. Hitta `createBookingEvent()` och `sendBookingEvent()`. Förutsäg vilka fält ett klick skapar.
-2. Lägg **överst** i `app.js` till `window.dataLayer = window.dataLayer || [];`. Lägg sedan direkt efter `const event = createBookingEvent();` i `sendBookingEvent()` till:
+2. Nu ska du ändra **`public/app.js` på två olika ställen**. Gör del A först och därefter del B.
+
+   ### A. Lägg till `dataLayer` högst upp i filen
+
+   Kontrollera först att du har öppnat filen **`public/app.js`** – inte någon annan JavaScript-fil.
+
+   Gå allra högst upp i filen och lägg till den här raden:
 
    ```js
+   window.dataLayer = window.dataLayer || [];
+   ```
+
+   Raden ska ligga **utanför alla funktioner**, högst upp i filen. Den skapar den array som vi använder som ett enkelt datalager i webbläsaren.
+
+   ### B. Lägg tracking-koden inne i `sendBookingEvent()`
+
+   Stanna kvar i **`public/app.js`**.
+
+   1. Leta upp funktionen som heter **`sendBookingEvent()`**.
+   2. Inne i den funktionen letar du upp exakt den här raden:
+
+      ```js
+      const event = createBookingEvent();
+      ```
+
+   3. Placera markören **direkt på raden UNDER** `const event = createBookingEvent();`.
+   4. Klistra in följande kod där:
+
+      ```js
+      window.dataLayer.push({
+        event: event.event,
+        eventId: event.eventId,
+        occurredAt: event.occurredAt,
+        offeringId: event.context.offeringId,
+      });
+      console.log("Senaste tracking-event", window.dataLayer.at(-1));
+      ```
+
+   **Viktigt:** Lägg inte kodblocket högst upp i filen och skapa inte en ny funktion. Koden ska ligga **inne i den befintliga `sendBookingEvent()`**, direkt efter att eventet har skapats.
+
+   När du är klar ska ordningen inne i funktionen alltså vara:
+
+   ```js
+   const event = createBookingEvent();
+
    window.dataLayer.push({
      event: event.event,
      eventId: event.eventId,
@@ -21,7 +63,11 @@ Du kan visa eventnamn, parametrar och tidpunkt, jämföra klientens objekt med r
      offeringId: event.context.offeringId,
    });
    console.log("Senaste tracking-event", window.dataLayer.at(-1));
+
+   // Här fortsätter den kod som redan fanns i funktionen.
    ```
+
+   Spara filen. Du ska **inte ta bort eller ersätta den befintliga koden** i `sendBookingEvent()`; du lägger bara till tracking-koden på rätt plats.
 
 3. Spara och ladda om. Öppna **Console** och **Network**. Klicka en gång. Läs `window.dataLayer` i Console och jämför senaste posten med **Payload** för `POST /api/events`. Notera att fältet `offeringId` ligger direkt på datalagerposten men under `context` i requestens objekt.
 4. Gör ett andra klick. Jämför `eventId` och `occurredAt` i de två posterna. Ladda om sidan och skriv `window.dataLayer` igen: denna array skapades i minnet och byggs upp på nytt efter omladdningen.
