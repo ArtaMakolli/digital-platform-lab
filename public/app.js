@@ -1,3 +1,4 @@
+window.dataLayer = window.dataLayer || [];
 const bookingButton = document.querySelector("#booking-button");
 const eventLog = document.querySelector("#event-log");
 const statusMessage = document.querySelector("#status");
@@ -20,6 +21,13 @@ function createBookingEvent() {
 
 async function sendBookingEvent() {
   const event = createBookingEvent();
+  window.dataLayer.push({
+  event: event.event,
+  eventId: event.eventId,
+  occurredAt: event.occurredAt,
+  offeringId: event.context.offeringId,
+});
+console.log("Senaste tracking-event", window.dataLayer.at(-1));
   bookingButton.disabled = true;
   statusMessage.textContent = "Sending event...";
   showLog("Request body", event);
